@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weather Station Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .data-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .data-card {
+            border: 1px solid #ccc;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Weather Station Dashboard</h1>
+    <div class="data-container" id="data-container">
+        <!-- Data will be populated here -->
+    </div>
+
+    <script>
+        function updateData() {
+            fetch('/api/latest')
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('data-container');
+                    container.innerHTML = `
+                        <div class="data-card">
+                            <h3>Temperature</h3>
+                            <p>${data.temperature}°C</p>
+                        </div>
+                        <div class="data-card">
+                            <h3>Humidity</h3>
+                            <p>${data.humidity}%</p>
+                        </div>
+                        <div class="data-card">
+                            <h3>Light Level</h3>
+                            <p>${data.light_level}</p>
+                        </div>
+                        <div class="data-card">
+                            <h3>Distance</h3>
+                            <p>${data.distance} cm</p>
+                        </div>
+                        <div class="data-card">
+                            <h3>Last Updated</h3>
+                            <p>${data.timestamp}</p>
+                        </div>
+                    `;
+                });
+        }
+
+        // Update data every 5 seconds
+        setInterval(updateData, 5000);
+        updateData(); // Initial update
+    </script>
+</body>
+</html>
